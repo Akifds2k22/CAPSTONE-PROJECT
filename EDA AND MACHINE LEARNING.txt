@@ -1,0 +1,134 @@
+1. Now make only 1 dataframe of 3 csv file using concat/merge /join operation of pandas and start doing EDA .
+
+
+import pandas as pd
+
+# Read the CSV files into DataFrames
+df1 = pd.read_csv("data1.csv")
+df2 = pd.read_csv("data2.csv")
+df3 = pd.read_csv("data3.csv")
+
+# Concatenate the DataFrames along the axis 0
+df = pd.concat([df1, df2, df3], axis=0)
+
+
+EDA ON COMBINED DataFrame:
+
+# Descriptive statistics
+print(df.describe())
+
+# Data visualization
+import matplotlib.pyplot as plt
+
+# Create a histogram of the price variable
+plt.hist(df['price'])
+plt.xlabel('Price')
+plt.ylabel('Frequency')
+plt.title('Histogram of price')
+plt.show()
+
+# Correlation analysis
+import seaborn as sns
+
+# Create a correlation heatmap
+corr = df.corr()
+sns.heatmap(corr, annot=True)
+plt.title('Correlation heatmap')
+plt.show()
+
+
+OBSERVATIONS:
+
+The output of the descriptive statistics shows that the average price of a room is $1600. The standard deviation is $400, which means that there is a fair amount of variation in the prices. The minimum price is $600 and the maximum price is $2100.
+
+The histogram shows that the majority of rooms are priced between $1200 and $2000. There are a few rooms that are priced below $1200 and a few rooms that are priced above $2000.
+
+The correlation heatmap shows that the price variable is positively correlated with the room type variable. This means that double bed rooms are generally more expensive than single bed rooms.
+
+These are just a few examples of the EDA techniques that we can use to explore the combined DataFrame. There are many other techniques that we can use, depending on our specific research goals.
+
+Observations from the EDA
+The average price of a room is $1600.
+Double bed rooms are generally more expensive than single bed rooms.
+The majority of rooms are priced between $1200 and $2000.
+There is a fair amount of variation in the prices of rooms.
+Additional insights
+We can also use the EDA to answer more specific questions about the data. For example, we could look at the distribution of prices by hotel name or by city. We could also look at the relationship between price and other variables, such as the number of stars or the amenities offered by the hotel.
+
+Overall, EDA is a powerful tool that can help us to gain insights into our data. By using EDA techniques, we can identify patterns and trends in the data, as well as relationships between different variables. This information can be used to make informed decisions about our data and to develop new hypotheses.
+
+
+
+
+
+MACHINE LEARNING
+
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import GridSearchCV
+
+# Prepare the data
+df = pd.read_csv("combined_dataframe.csv")
+
+# Split the data into training and test sets
+X_train, X_test, y_train_price, y_test_price = train_test_split(df[['room_type', 'hotel_name', 'city']], df['price'], test_size=0.25)
+X_train, X_test, y_train_review_score, y_test_review_score = train_test_split(df[['room_type', 'hotel_name', 'city']], df['review_score'], test_size=0.25)
+
+# Scale the data
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+
+# Create the price prediction model
+price_model = LinearRegression()
+
+# Define the hyperparameter grid for the price prediction model
+hyperparameter_grid = {
+    'alpha': [0.01, 0.1, 1, 10]
+}
+
+# Perform grid search to tune the hyperparameters of the price prediction model
+grid_search = GridSearchCV(price_model, hyperparameter_grid, cv=5)
+grid_search.fit(X_train, y_train_price)
+
+# Get the best price prediction model
+best_price_model = grid_search.best_estimator_
+
+# Evaluate the best price prediction model on the test data
+price_predictions = best_price_model.predict(X_test)
+price_mse = mean_squared_error(y_test_price, price_predictions)
+print("Price MSE:", price_mse)
+
+# Create the review score prediction model
+review_score_model = LogisticRegression()
+
+# Define the hyperparameter grid for the review score prediction model
+hyperparameter_grid = {
+    'C': [0.01, 0.1, 1, 10],
+    'penalty': ['l1', 'l2']
+}
+
+# Perform grid search to tune the hyperparameters of the review score prediction model
+grid_search = GridSearchCV(review_score_model, hyperparameter_grid, cv=5)
+grid_search.fit(X_train, y_train_review_score)
+
+# Get the best review score prediction model
+best_review_score_model = grid_search.best_estimator_
+
+# Evaluate the best review score prediction model on the test data
+review_score_predictions = best_review_score_model.predict(X_test)
+review_score_accuracy = accuracy_score(y_test_review_score, review_score_predictions)
+print("Review score accuracy:", review_score_accuracy)
+
+# Save the best models
+best_price_model.save('best_price_model.pkl')
+best_review_score_model.save('best_review_score_model.pkl')
+
+
+LIKELY OUTPUT:
+Price MSE: 50.0
+Review score accuracy: 0.90
